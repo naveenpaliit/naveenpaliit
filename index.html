@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IIT Gandhinagar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .login-container {
+            margin: 100px auto;
+            width: 300px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #content {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="login-form" action="javascript:void(0);">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+
+    <div id="content">
+        <h2>About IIT Gandhinagar</h2>
+        <p>Loading Wikipedia content...</p>
+    </div>
+
+    <script>
+        document.getElementById("login-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            // Get values from the form
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // Check if the username and password are correct
+            if (username === "naveen" && password === "1234") {
+                alert("Login Successful!");
+
+                // Fetch Wikipedia content about IIT Gandhinagar
+                fetch("https://en.wikipedia.org/api/rest_v1/page/summary/IIT_Gandhinagar")
+                    .then(response => response.json())
+                    .then(data => {
+                        // Display the Wikipedia content
+                        document.getElementById("content").innerHTML = `
+                            <h2>${data.title}</h2>
+                            <p>${data.extract}</p>
+                            <p>For more information, visit <a href="${data.content_urls.desktop.page}" target="_blank">Wikipedia</a>.</p>
+                        `;
+                        document.getElementById("content").style.display = "block";
+                    })
+                    .catch(error => {
+                        console.error("Error fetching Wikipedia content:", error);
+                        document.getElementById("content").innerHTML = "Failed to load Wikipedia content.";
+                        document.getElementById("content").style.display = "block";
+                    });
+            } else {
+                alert("Login Failed. Please check your username and password.");
+            }
+        });
+    </script>
+</body>
+</html>
